@@ -1,0 +1,201 @@
+" -- Customization config --
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+set expandtab
+
+set t_Co=256
+set nocompatible
+
+set number
+"set cursorline
+set ruler
+set backspace=2
+set ru
+set confirm
+
+" Get Alt key to work
+let c='a'
+while c <= 'z'
+    exec "set <A-".c.">=\e".c
+    exec "imap \e".c." <A-".c.">"
+    let c = nr2char(1+char2nr(c))
+endw
+
+set timeout ttimeoutlen=50
+
+nnoremap <A-h> :tabprevious<CR>
+nnoremap <A-l> :tabnext<CR>
+nnoremap te :tabedit 
+nnoremap > :vertical resize -1<CR>
+nnoremap < :vertical resize +1<CR>
+
+
+" -- Plugin setting --
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" Keep Plugin commands between vundle#begin/end.
+
+Plugin 'tomasr/molokai'
+Plugin 'w0ng/vim-hybrid'
+"Plugin 'octol/vim-cpp-enhanced-highlight'
+"Plugin 'Lokaltog/vim-powerline'
+Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'scrooloose/nerdtree'
+Plugin 'majutsushi/tagbar'
+
+"Plugin 'jiangmiao/auto-pairs'
+Plugin 'ervandew/supertab'
+
+Plugin 'SirVer/ultisnips'
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
+"Plugin 'davidhalter/jedi-vim'
+"Plugin 'Rip-Rip/clang_complete'
+" support py3vim
+Plugin 'myint/clang-complete'
+Plugin 'rhysd/vim-clang-format'
+
+Plugin 'scrooloose/syntastic'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+" -- Colorscheme setting --
+syntax on
+colorscheme molokai
+"autocmd! BufEnter,BufNewFile *.c,*.cpp colorscheme hybrid
+" -- vim-cpp-enhanced-highlight --
+"let g:cpp_class_scope_highlight = 1             " Highlighting of class scope.
+"let g:cpp_experimental_template_highlight = 1   " Highlighting of template functions.
+
+" -- Powerline setting --
+"let g:Powerline_symbols = 'fancy'
+"set laststatus=2
+
+" -- Airline setting --
+"let g:airline#extensions#tabline#enabled = 1
+set laststatus=2
+set ambiwidth=double
+"set fillchars+=stl:\ ,stlnc:\
+let g:airline_theme='powerlineish'
+"let g:airline_theme='light'
+"let g:airline_theme='murmur'
+set encoding=utf-8
+let g:airline_powerline_fonts = 1
+" the separator used on the left side
+let g:airline_left_sep=''
+" the separator used on the right side 
+let g:airline_right_sep=''
+
+" -- NERDTree setting --
+map <F5> :NERDTreeToggle<CR>
+"
+" -- Tagbar setting --
+nmap <F8> :TagbarToggle<CR>
+let g:tagbar_width = 40
+"
+"" -- AutoPairs setting --
+"
+"" -- SuperTab setting --
+let g:SuperTabDefaultCompletionType='<c-x><c-u><c-p>'
+"let g:SuperTabDefaultCompletionType = '<c-n>'
+"let g:SuperTabContexDefaultCompletionType = '<c-n>'
+
+" -- UltiSnips setting --
+"let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+"let g:UltiSnipsEditSplit="vertical"
+"" make vim recognizing snippets dir
+""(below statement is not work ... )
+"set runtimepath+=~/.vim/KaiSeven-snippets/
+"" use different snippets dir
+"let g:UltiSnipsSnippetsDir='~/.vim/KaiSeven-snippets/'
+"let g:UltiSnipsSnippetDirectories=["snippets"]
+
+" -- jedi setting --
+let g:jedi#completions_command = "<c-l>"
+let g:jedi#force_py_version = 3
+
+" -- ClangComplete settings --
+let g:clang_use_library=1
+" if there's an error, allow us to see it
+let g:clang_complete_copen=1
+let g:clang_complete_macros=1
+let g:clang_complete_patterns=0
+" Limit memory use
+let g:clang_memory_percent=70
+" Remove -std=c++11 if you don't use C++ for everything like I do.
+let g:clang_user_options=' -std=c++11 || exit 0'
+" Set this to 0 if you don't want autoselect, 1 if you want autohighlight,
+" and 2 if you want autoselect. 0 will make you arrow down to select the first
+" option, 1 will select the first option for you, but won't insert it unless you
+" press enter. 2 will automatically insert what it thinks is right. 1 is the most
+" convenient IMO, and it defaults to 0.
+let g:clang_auto_select=1
+
+set conceallevel=2
+set concealcursor=vin
+let g:clang_snippets=1
+let g:clang_conceal_snippets=1
+" The single one that works with clang_complete
+let g:clang_snippets_engine='ultisnips'
+"let g:clang_snippets_engine='clang_complete'
+set completeopt=menu,longest
+let g:clang_library_path = '/usr/lib/llvm-3.5/lib'
+let g:clang_user_options = "-I/usr/include/c++/4.9"
+
+" -- Syntastic setting --
+if !executable('clang-format') && executable('clang-format-3.5')
+  let g:clang_format#command = 'clang-format-3.5'
+endif
+let g:clang_format#style_options = {
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11"}
+
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" if you install vim-operator-user
+" autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+" Toggle auto formatting:
+nmap <Leader>C :ClangFormatAutoToggle<CR>
+
+" -- Syntastic setting --
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
